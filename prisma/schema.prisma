@@ -1,0 +1,197 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─────────────────────────────────────────────────────────────
+// NextAuth.js v5 — Required Models
+// ─────────────────────────────────────────────────────────────
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?
+  role          UserRole  @default(USER)
+  isActive      Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts Account[]
+  sessions Session[]
+  memberships Membership[]
+}
+
+enum UserRole {
+  ADMIN
+  USER
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// ─────────────────────────────────────────────────────────────
+// SaaS — Custom Models
+// ─────────────────────────────────────────────────────────────
+
+model Organization {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  memberships       Membership[]
+  subscription      Subscription?
+  featureOverrides  FeatureOverride[]
+}
+
+model Membership {
+  id             String        @id @default(cuid())
+  userId         String
+  organizationId String
+  role           MembershipRole
+  createdAt      DateTime      @default(now())
+
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, organizationId])
+}
+
+enum MembershipRole {
+  OWNER
+  ADMIN
+  MEMBER
+}
+
+model Plan {
+  id               String           @id @default(cuid())
+  name             String
+  slug             String           @unique
+  description      String?
+  price            Int?             // price in cents, e.g. 2900 = $29.00
+  billingInterval  BillingInterval?
+  isActive         Boolean          @default(true)
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+
+  planFeatures   PlanFeature[]
+  subscriptions  Subscription[]
+}
+
+enum BillingInterval {
+  MONTHLY
+  YEARLY
+  ONE_TIME
+}
+
+model Feature {
+  id           String      @id @default(cuid())
+  key          String      @unique
+  name         String
+  description  String?
+  type         FeatureType
+  defaultValue String      @default("false")
+  createdAt    DateTime    @default(now())
+
+  planFeatures     PlanFeature[]
+  featureOverrides FeatureOverride[]
+}
+
+enum FeatureType {
+  BOOLEAN
+  NUMBER
+}
+
+model PlanFeature {
+  id        String @id @default(cuid())
+  planId    String
+  featureId String
+  value     String // "true"/"false" for BOOLEAN, "10" for NUMBER
+
+  plan    Plan    @relation(fields: [planId], references: [id], onDelete: Cascade)
+  feature Feature @relation(fields: [featureId], references: [id], onDelete: Cascade)
+
+  @@unique([planId, featureId])
+}
+
+model FeatureOverride {
+  id             String   @id @default(cuid())
+  organizationId String
+  featureId      String
+  value          String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  feature      Feature      @relation(fields: [featureId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, featureId])
+}
+
+model Subscription {
+  id                 String             @id @default(cuid())
+  organizationId     String             @unique
+  planId             String
+  status             SubscriptionStatus
+  billingCycleStart  DateTime
+  billingCycleEnd    DateTime
+  trialEndsAt        DateTime?
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  plan         Plan         @relation(fields: [planId], references: [id])
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  TRIALING
+  PAST_DUE
+  CANCELED
+  PAUSED
+}
