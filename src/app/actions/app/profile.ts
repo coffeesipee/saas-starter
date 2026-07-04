@@ -19,7 +19,7 @@ export async function updateProfile(data: z.infer<typeof profileSchema>) {
   const session = await requireAuth();
   const validated = profileSchema.parse(data);
   await db.user.update({ where: { id: session.user.id }, data: validated });
-  revalidatePath("/settings");
+  revalidatePath("/app/settings");
   return { success: true };
 }
 

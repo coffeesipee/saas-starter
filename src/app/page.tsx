@@ -1,168 +1,225 @@
+"use client";
+
 import Link from "next/link";
-import { Check, Zap, Building2, Shield, CreditCard, Users } from "lucide-react";
+import { Check, Zap, Building2, Shield, CreditCard, Users, ArrowRight, Sparkles } from "lucide-react";
+import { motion } from "framer-motion";
 
 const features = [
-  { icon: Shield, title: "Authentication", description: "Email/password + OAuth (GitHub). JWT sessions, role-based access control." },
-  { icon: Building2, title: "Organizations", description: "Multi-tenant architecture. Users belong to orgs with OWNER, ADMIN, or MEMBER roles." },
-  { icon: CreditCard, title: "Plans & Subscriptions", description: "Flexible plan management. Manually assign subscriptions per organization." },
-  { icon: Zap, title: "Feature Flags", description: "Boolean and numeric feature gates. Per-plan defaults with per-org overrides." },
-  { icon: Users, title: "Admin Portal", description: "Full CRUD for users, orgs, plans, features, and subscriptions from /admin." },
-  { icon: Check, title: "Production Ready", description: "Next.js 16, Prisma, TypeScript, Tailwind CSS. Deploy anywhere in minutes." },
+  { icon: Shield, title: "Enterprise Authentication", description: "Bulletproof email/password & OAuth flows with JWT sessions and role-based access control." },
+  { icon: Building2, title: "Multi-Tenant Architecture", description: "Built for B2B. Users seamlessly collaborate within organizations with granular permissions." },
+  { icon: CreditCard, title: "Flexible Billing", description: "Tiered plans, usage-based billing, and manual assignments all managed in one dashboard." },
+  { icon: Zap, title: "Feature Flags", description: "Ship faster with boolean and numeric feature gates. Per-plan defaults and per-org overrides." },
+  { icon: Users, title: "Powerful Admin Console", description: "Gain complete control with full CRUD for users, orgs, plans, features, and subscriptions." },
+  { icon: Check, title: "Production Ready", description: "Built on Next.js 16, Prisma, TypeScript, and Tailwind CSS. Deploy anywhere in minutes." },
 ];
 
 const plans = [
-  { name: "Free", price: "$0", interval: "/month", description: "Perfect for individuals", features: ["1 organization", "3 feature flags", "Community support"], highlighted: false },
-  { name: "Pro", price: "$29", interval: "/month", description: "For growing teams", features: ["Unlimited organizations", "Unlimited features", "Per-org overrides", "Priority support"], highlighted: true },
-  { name: "Enterprise", price: "Custom", interval: "", description: "For large organizations", features: ["Everything in Pro", "Custom integrations", "SLA guarantee", "Dedicated support"], highlighted: false },
+  { name: "Starter", price: "$0", interval: "/mo", description: "Perfect for testing the waters", features: ["1 organization", "3 feature flags", "Community support"], highlighted: false },
+  { name: "Pro", price: "$49", interval: "/mo", description: "For growing businesses", features: ["Unlimited organizations", "Unlimited features", "Per-org overrides", "Priority support"], highlighted: true },
+  { name: "Scale", price: "Custom", interval: "", description: "For large-scale operations", features: ["Everything in Pro", "Custom integrations", "99.9% uptime SLA", "Dedicated success manager"], highlighted: false },
 ];
+
+const fadeInUp = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
+};
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.1 }
+  }
+};
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-zinc-950 text-white">
-      {/* Nav */}
-      <nav className="border-b border-zinc-800 sticky top-0 z-10 bg-zinc-950/80 backdrop-blur-sm">
-        <div className="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className="h-7 w-7 rounded-lg bg-violet-600 flex items-center justify-center">
-              <span className="text-white font-bold text-xs">S</span>
-            </div>
-            <span className="font-semibold text-sm">SaaS Boilerplate</span>
-          </div>
-          <div className="flex items-center gap-3">
-            <Link href="/login" className="text-sm text-zinc-400 hover:text-white transition-colors px-3 py-1.5">
-              Sign in
-            </Link>
-            <Link href="/register" className="text-sm bg-violet-600 hover:bg-violet-700 text-white px-4 py-1.5 rounded-lg transition-colors font-medium">
-              Get started
-            </Link>
-          </div>
-        </div>
-      </nav>
+    <div className="min-h-screen bg-zinc-950 text-white overflow-hidden font-sans">
+      {/* Dynamic Background */}
+      <div className="fixed inset-0 z-0">
+        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/20 rounded-full blur-[120px]" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-600/20 rounded-full blur-[120px]" />
+      </div>
 
-      {/* Hero */}
-      <section className="relative pt-24 pb-20 px-4 overflow-hidden">
-        {/* Background glow */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-violet-600/10 rounded-full blur-3xl pointer-events-none" />
-
-        <div className="relative max-w-4xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-violet-500/20 bg-violet-500/10 text-violet-400 text-sm font-medium mb-8">
-            <Zap className="h-3.5 w-3.5" />
-            Open source SaaS starter kit
-          </div>
-          <h1 className="text-5xl sm:text-6xl font-bold tracking-tight bg-gradient-to-b from-white to-zinc-400 bg-clip-text text-transparent mb-6 leading-[1.1]">
-            Ship your SaaS<br />in days, not months
-          </h1>
-          <p className="text-lg text-zinc-400 max-w-2xl mx-auto mb-10">
-            Production-ready boilerplate with auth, organizations, plans, subscriptions, and feature flags. Built with Next.js 16, Prisma, and TypeScript.
-          </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-            <Link
-              href="/register"
-              id="hero-cta"
-              className="inline-flex items-center gap-2 bg-violet-600 hover:bg-violet-700 text-white px-6 py-3 rounded-xl font-medium transition-all shadow-lg shadow-violet-500/25 hover:shadow-violet-500/40"
-            >
-              Get started free <span className="text-violet-300">→</span>
-            </Link>
-            <Link
-              href="/login"
-              className="inline-flex items-center gap-2 border border-zinc-700 hover:border-zinc-600 text-zinc-300 hover:text-white px-6 py-3 rounded-xl font-medium transition-all"
-            >
-              Sign in
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Features */}
-      <section className="py-20 px-4 border-t border-zinc-800">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-14">
-            <h2 className="text-3xl font-bold">Everything you need to launch</h2>
-            <p className="text-zinc-400 mt-3 max-w-xl mx-auto">
-              A complete SaaS foundation with all the modules you'd build anyway — pre-built and ready to customize.
-            </p>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {features.map((f) => (
-              <div
-                key={f.title}
-                className="p-6 rounded-xl border border-zinc-800 bg-zinc-900/50 hover:border-zinc-700 transition-colors group"
-              >
-                <div className="h-9 w-9 rounded-lg bg-violet-600/10 border border-violet-600/20 flex items-center justify-center mb-4 group-hover:bg-violet-600/20 transition-colors">
-                  <f.icon className="h-4.5 w-4.5 text-violet-400" />
-                </div>
-                <h3 className="font-semibold mb-2">{f.title}</h3>
-                <p className="text-sm text-zinc-400 leading-relaxed">{f.description}</p>
+      <div className="relative z-10">
+        {/* Nav */}
+        <nav className="border-b border-zinc-800/50 sticky top-0 z-50 bg-zinc-950/70 backdrop-blur-md">
+          <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center shadow-lg shadow-primary/20">
+                <Sparkles className="h-4 w-4 text-primary-foreground" />
               </div>
-            ))}
+              <span className="font-bold tracking-tight text-lg">SaaS Boilerplate</span>
+            </div>
+            <div className="flex items-center gap-4">
+              <Link href="/login" className="text-sm font-medium text-zinc-300 hover:text-white transition-colors">
+                Sign in
+              </Link>
+              <Link href="/register" className="text-sm bg-primary hover:bg-primary/90 text-primary-foreground px-5 py-2 rounded-lg transition-all font-medium shadow-md shadow-primary/20">
+                Get started
+              </Link>
+            </div>
           </div>
-        </div>
-      </section>
+        </nav>
 
-      {/* Pricing */}
-      <section className="py-20 px-4 border-t border-zinc-800">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-14">
-            <h2 className="text-3xl font-bold">Simple pricing</h2>
-            <p className="text-zinc-400 mt-3">Assign plans manually via the admin portal. No Stripe required.</p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {plans.map((plan) => (
-              <div
-                key={plan.name}
-                className={`p-6 rounded-xl border flex flex-col ${
-                  plan.highlighted
-                    ? "border-violet-500 bg-violet-600/10 shadow-lg shadow-violet-500/10"
-                    : "border-zinc-800 bg-zinc-900/50"
-                }`}
+        {/* Hero */}
+        <section className="relative pt-32 pb-24 px-6 flex flex-col items-center text-center">
+          <motion.div 
+            initial="hidden"
+            animate="visible"
+            variants={staggerContainer}
+            className="max-w-4xl mx-auto flex flex-col items-center"
+          >
+            <motion.div variants={fadeInUp} className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/30 bg-primary/10 text-primary text-sm font-medium mb-8 shadow-sm shadow-primary/10">
+              <Zap className="h-4 w-4" />
+              The ultimate starting point for your next big idea
+            </motion.div>
+            
+            <motion.h1 variants={fadeInUp} className="text-5xl md:text-7xl font-extrabold tracking-tight mb-8 leading-tight">
+              Ship your SaaS in <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-blue-400 to-purple-500">
+                days, not months
+              </span>
+            </motion.h1>
+            
+            <motion.p variants={fadeInUp} className="text-xl text-zinc-400 max-w-2xl mb-12 leading-relaxed">
+              Stop reinventing the wheel. Get a production-ready foundation with authentication, multi-tenancy, subscriptions, and RBAC out of the box.
+            </motion.p>
+            
+            <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
+              <Link
+                href="/register"
+                className="w-full sm:w-auto flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-4 rounded-xl font-semibold text-lg transition-all shadow-xl shadow-primary/25 hover:shadow-primary/40 hover:-translate-y-0.5"
               >
-                {plan.highlighted && (
-                  <div className="text-xs font-medium text-violet-400 bg-violet-500/10 border border-violet-500/20 px-2 py-0.5 rounded-full w-fit mb-3">
-                    Most popular
+                Start building for free <ArrowRight className="h-5 w-5" />
+              </Link>
+              <Link
+                href="/login"
+                className="w-full sm:w-auto flex items-center justify-center gap-2 bg-zinc-900 border border-zinc-700 hover:border-zinc-500 hover:bg-zinc-800 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all"
+              >
+                View demo
+              </Link>
+            </motion.div>
+          </motion.div>
+        </section>
+
+        {/* Features */}
+        <section className="py-24 px-6 relative">
+          <div className="absolute inset-0 bg-gradient-to-b from-zinc-900/50 to-transparent" />
+          <motion.div 
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={staggerContainer}
+            className="max-w-7xl mx-auto relative z-10"
+          >
+            <div className="text-center mb-16">
+              <motion.h2 variants={fadeInUp} className="text-3xl md:text-4xl font-bold tracking-tight mb-4">Everything you need to scale</motion.h2>
+              <motion.p variants={fadeInUp} className="text-zinc-400 max-w-2xl mx-auto text-lg">
+                We've built all the boring stuff so you can focus on your core product and features.
+              </motion.p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {features.map((f, i) => (
+                <motion.div
+                  key={f.title}
+                  variants={fadeInUp}
+                  className="p-8 rounded-2xl border border-zinc-800 bg-zinc-900/40 backdrop-blur-sm hover:bg-zinc-800/60 hover:border-zinc-700 transition-all group"
+                >
+                  <div className="h-12 w-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-primary/20 transition-all duration-300">
+                    <f.icon className="h-6 w-6 text-primary" />
                   </div>
-                )}
-                <p className="text-lg font-semibold">{plan.name}</p>
-                <p className="text-sm text-zinc-400 mt-1 mb-4">{plan.description}</p>
-                <div className="mb-6">
-                  <span className="text-3xl font-bold">{plan.price}</span>
-                  <span className="text-zinc-400 text-sm">{plan.interval}</span>
-                </div>
-                <ul className="space-y-2.5 flex-1">
-                  {plan.features.map((feat) => (
-                    <li key={feat} className="flex items-center gap-2 text-sm">
-                      <Check className="h-4 w-4 text-violet-400 flex-shrink-0" />
-                      <span className="text-zinc-300">{feat}</span>
-                    </li>
-                  ))}
-                </ul>
-                <Link
-                  href="/register"
-                  className={`mt-6 block text-center py-2.5 rounded-lg font-medium text-sm transition-all ${
+                  <h3 className="text-xl font-semibold mb-3">{f.title}</h3>
+                  <p className="text-zinc-400 leading-relaxed">{f.description}</p>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        </section>
+
+        {/* Pricing */}
+        <section className="py-24 px-6 border-t border-zinc-800/50">
+          <motion.div 
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={staggerContainer}
+            className="max-w-6xl mx-auto"
+          >
+            <div className="text-center mb-16">
+              <motion.h2 variants={fadeInUp} className="text-3xl md:text-4xl font-bold tracking-tight mb-4">Simple, transparent pricing</motion.h2>
+              <motion.p variants={fadeInUp} className="text-zinc-400 max-w-2xl mx-auto text-lg">
+                Choose the perfect plan for your business. No hidden fees or surprises.
+              </motion.p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {plans.map((plan, i) => (
+                <motion.div
+                  key={plan.name}
+                  variants={fadeInUp}
+                  className={`relative p-8 rounded-3xl flex flex-col ${
                     plan.highlighted
-                      ? "bg-violet-600 hover:bg-violet-700 text-white shadow-lg shadow-violet-500/20"
-                      : "border border-zinc-700 hover:border-zinc-600 text-zinc-300 hover:text-white"
+                      ? "bg-gradient-to-b from-primary/20 to-zinc-900/50 border border-primary/50 shadow-2xl shadow-primary/20"
+                      : "bg-zinc-900/50 border border-zinc-800"
                   }`}
                 >
-                  Get started
-                </Link>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="border-t border-zinc-800 py-8 px-4">
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-zinc-500">
-          <div className="flex items-center gap-2">
-            <div className="h-5 w-5 rounded bg-violet-600 flex items-center justify-center">
-              <span className="text-white font-bold text-xs">S</span>
+                  {plan.highlighted && (
+                    <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-primary text-primary-foreground text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+                      Most Popular
+                    </div>
+                  )}
+                  <h3 className="text-2xl font-semibold mb-2">{plan.name}</h3>
+                  <p className="text-zinc-400 h-12">{plan.description}</p>
+                  
+                  <div className="my-8">
+                    <span className="text-5xl font-extrabold">{plan.price}</span>
+                    <span className="text-zinc-400 text-lg ml-1">{plan.interval}</span>
+                  </div>
+                  
+                  <ul className="space-y-4 mb-8 flex-1">
+                    {plan.features.map((feat) => (
+                      <li key={feat} className="flex items-center gap-3">
+                        <div className="h-5 w-5 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
+                          <Check className="h-3 w-3 text-primary" />
+                        </div>
+                        <span className="text-zinc-200">{feat}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  
+                  <Link
+                    href="/register"
+                    className={`w-full py-4 rounded-xl font-semibold text-center transition-all ${
+                      plan.highlighted
+                        ? "bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/25"
+                        : "bg-zinc-800 hover:bg-zinc-700 text-white"
+                    }`}
+                  >
+                    Get started
+                  </Link>
+                </motion.div>
+              ))}
             </div>
-            SaaS Boilerplate
+          </motion.div>
+        </section>
+
+        {/* Footer */}
+        <footer className="border-t border-zinc-800/80 py-12 px-6">
+          <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="flex items-center gap-3">
+              <div className="h-6 w-6 rounded-md bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center">
+                <Sparkles className="h-3 w-3 text-white" />
+              </div>
+              <span className="font-semibold text-zinc-200">SaaS Boilerplate</span>
+            </div>
+            <p className="text-zinc-500 text-sm">
+              © {new Date().getFullYear()} SaaS Boilerplate. Built with Next.js & Prisma.
+            </p>
           </div>
-          <p>Built with Next.js 16, Prisma & TypeScript</p>
-        </div>
-      </footer>
+        </footer>
+      </div>
     </div>
   );
 }

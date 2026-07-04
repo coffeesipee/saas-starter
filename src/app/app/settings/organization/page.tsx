@@ -10,7 +10,8 @@ export default async function OrganizationSettingsPage() {
   if (!session?.user) redirect("/login");
 
   const memberships = await getUserMemberships();
-  if (memberships.length === 0) redirect("/onboarding");
+  if (memberships.length === 0) redirect("/app/onboarding");
+  const orgId = memberships[0].organizationId;
 
   const firstOrg = memberships[0].organization;
 

@@ -27,15 +27,15 @@ export default async function AppLayout({ children }: { children: React.ReactNod
     <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-zinc-950">
       {/* Top navigation bar */}
       <header className="h-14 border-b bg-white dark:bg-zinc-900 dark:border-zinc-800 sticky top-0 z-10">
-        <div className="h-full max-w-screen-xl mx-auto flex items-center justify-between px-4">
-          <Link href="/dashboard" className="flex items-center gap-2.5">
+        <div className="h-14 flex items-center px-4 border-b border-zinc-800">
+          <Link href="/app/dashboard" className="flex items-center gap-2.5">
             <div className="h-7 w-7 rounded-lg bg-violet-600 flex items-center justify-center">
               <span className="text-white font-bold text-xs">S</span>
             </div>
             <span className="font-semibold text-sm">SaaS App</span>
           </Link>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 ml-auto">
             {/* Org badge */}
             {firstOrg && (
               <div className="hidden sm:flex items-center gap-1.5 text-sm text-muted-foreground border rounded-full px-3 py-1 bg-gray-50 dark:bg-zinc-800 dark:border-zinc-700">
@@ -62,17 +62,29 @@ export default async function AppLayout({ children }: { children: React.ReactNod
       <div className="flex flex-1 max-w-screen-xl mx-auto w-full">
         {/* Sidebar */}
         <aside className="w-52 flex-shrink-0 hidden md:block py-6 px-3">
-          <nav className="space-y-0.5">
-            <NavLink href="/dashboard" icon={LayoutDashboard}>Dashboard</NavLink>
-            {firstOrg && (
-              <>
-                <NavLink href="/billing" icon={CreditCard}>Billing</NavLink>
-                <NavLink href="/settings/members" icon={Users}>Members</NavLink>
-                <NavLink href="/settings/organization" icon={Building2}>Organization</NavLink>
-              </>
-            )}
-            <NavLink href="/settings" icon={Settings}>Settings</NavLink>
-          </nav>
+          <div className="px-3">
+            <NavLink href="/app/dashboard" icon={LayoutDashboard}>Dashboard</NavLink>
+          </div>
+
+          <div className="px-3 mt-6">
+            <div className="text-xs font-semibold text-zinc-500 mb-2 px-3">Organization</div>
+            <div className="space-y-0.5">
+              <NavLink href="/app/billing" icon={CreditCard}>Billing</NavLink>
+              {firstOrg && (
+                <>
+                  <NavLink href="/settings/members" icon={Users}>Members</NavLink>
+                  <NavLink href="/settings/organization" icon={Building2}>Organization</NavLink>
+                </>
+              )}
+            </div>
+          </div>
+
+          <div className="px-3 mt-6">
+            <div className="text-xs font-semibold text-zinc-500 mb-2 px-3">Personal</div>
+            <div className="space-y-0.5">
+              <NavLink href="/app/settings" icon={Settings}>Settings</NavLink>
+            </div>
+          </div>
         </aside>
 
         {/* Main content */}

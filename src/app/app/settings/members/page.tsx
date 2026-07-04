@@ -10,7 +10,7 @@ export default async function MembersPage() {
   if (!session?.user) redirect("/login");
 
   const memberships = await getUserMemberships();
-  if (memberships.length === 0) redirect("/onboarding");
+  if (memberships.length === 0) redirect("/app/onboarding");
 
   const firstOrg = memberships[0];
   const isOwnerOrAdmin = ["OWNER", "ADMIN"].includes(firstOrg.role);

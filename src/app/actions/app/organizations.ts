@@ -27,7 +27,7 @@ export async function createOrganization(data: z.infer<typeof orgSchema>) {
     },
   });
 
-  revalidatePath("/dashboard");
+  revalidatePath("/app/dashboard");
   return { success: true, org };
 }
 
@@ -39,8 +39,8 @@ export async function updateOrganization(orgId: string, data: { name?: string; d
   }
 
   await db.organization.update({ where: { id: orgId }, data });
-  revalidatePath("/settings/organization");
-  revalidatePath("/dashboard");
+  revalidatePath("/app/settings/organization");
+  revalidatePath("/app/dashboard");
   return { success: true };
 }
 
@@ -54,7 +54,7 @@ export async function removeMember(orgId: string, userId: string) {
   await db.membership.delete({
     where: { userId_organizationId: { userId, organizationId: orgId } },
   });
-  revalidatePath("/settings/members");
+  revalidatePath("/app/settings/members");
   return { success: true };
 }
 
@@ -63,7 +63,7 @@ export async function leaveOrganization(orgId: string) {
   await db.membership.delete({
     where: { userId_organizationId: { userId: session.user.id, organizationId: orgId } },
   });
-  revalidatePath("/dashboard");
+  revalidatePath("/app/dashboard");
   return { success: true };
 }
 

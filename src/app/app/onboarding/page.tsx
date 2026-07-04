@@ -37,9 +37,11 @@ export default function OnboardingPage() {
   async function onSubmit(data: z.infer<typeof schema>) {
     setLoading(true);
     try {
-      await createOrganization(data);
-      toast.success("Organization created! Welcome aboard 🎉");
-      router.push("/dashboard");
+      const result = await createOrganization(data);
+      if (result.success) {
+        toast.success("Organization created! Welcome aboard 🎉");
+        router.push("/app/dashboard");
+      }
       router.refresh();
     } catch (e: unknown) {
       const message = e instanceof Error ? e.message : "Failed to create organization";

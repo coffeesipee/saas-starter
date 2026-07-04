@@ -22,7 +22,7 @@ function formatPrice(price: number | null, interval: string | null) {
 
 export default async function BillingPage() {
   const memberships = await getUserMemberships();
-  if (memberships.length === 0) redirect("/onboarding");
+  if (memberships.length === 0) redirect("/app/onboarding");
 
   const firstOrg = memberships[0].organization;
   const subscription = firstOrg.subscription;

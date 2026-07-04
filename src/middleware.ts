@@ -12,7 +12,7 @@ export default auth(function middleware(req: NextRequest & { auth: { user?: { ro
 
   // Public auth routes — allow through, redirect if already logged in
   if (pathname.startsWith("/login") || pathname.startsWith("/register")) {
-    if (session) return NextResponse.redirect(new URL("/dashboard", req.url));
+    if (session) return NextResponse.redirect(new URL("/app/dashboard", req.url));
     return NextResponse.next();
   }
 
@@ -22,7 +22,7 @@ export default auth(function middleware(req: NextRequest & { auth: { user?: { ro
       return NextResponse.redirect(new URL("/login", req.url));
     }
     if (session.user?.role !== "ADMIN") {
-      return NextResponse.redirect(new URL("/dashboard", req.url));
+      return NextResponse.redirect(new URL("/app/dashboard", req.url));
     }
     return NextResponse.next();
   }

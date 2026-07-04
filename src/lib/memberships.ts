@@ -57,7 +57,7 @@ export async function requireOrgRole(
   });
 
   if (!membership || !allowedRoles.includes(membership.role)) {
-    redirect("/dashboard");
+    redirect("/app/dashboard");
   }
 
   return membership;

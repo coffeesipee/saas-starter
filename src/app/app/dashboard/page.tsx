@@ -12,7 +12,7 @@ export default async function DashboardPage() {
 
   // Redirect to onboarding if no org
   if (memberships.length === 0) {
-    redirect("/onboarding");
+    redirect("/app/onboarding");
   }
 
   const firstOrg = memberships[0].organization;

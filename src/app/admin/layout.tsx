@@ -21,6 +21,7 @@ const navItems = [
   { href: "/admin/plans", label: "Plans", icon: CreditCard },
   { href: "/admin/features", label: "Features", icon: Zap },
   { href: "/admin/subscriptions", label: "Subscriptions", icon: ToggleLeft },
+  { href: "/admin/branding", label: "Branding", icon: Shield },
 ];
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -53,7 +54,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         {/* Footer */}
         <div className="p-4 border-t border-zinc-800">
           <Link
-            href="/dashboard"
+            href="/app/dashboard"
             className="flex items-center gap-2 text-xs text-zinc-400 hover:text-zinc-200 transition-colors"
           >
             <ChevronRight className="h-3 w-3" />

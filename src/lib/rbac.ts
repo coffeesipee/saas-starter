@@ -9,9 +9,8 @@ export async function isAdmin() {
 
 /** Require ADMIN role, redirect to /dashboard if not */
 export async function requireAdmin() {
-  const session = await auth();
-  if (!session?.user) redirect("/login");
-  if (session.user.role !== "ADMIN") redirect("/dashboard");
+  const session = await requireAuth();
+  if (session.user.role !== "ADMIN") redirect("/app/dashboard");
   return session;
 }
 
